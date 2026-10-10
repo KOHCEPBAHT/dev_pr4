@@ -1,0 +1,24 @@
+---
+- name: Установка и базовая настройка nginx.yml
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Установка через DNF
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Запуск сервиса nginx если не запущен
+      ansible.builtin.service:
+        name: nginx
+        state: started
+
+    - name: Копирование индексного файла
+      ansible.builtin.copy:
+        src: /usr/share/nginx/html/index.html
+        dest: /usr/share/nginx/html/index.html
+        force: true
+        owner: root
+        group: root
+        mode: '0644'
